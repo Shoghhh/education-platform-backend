@@ -1,0 +1,23 @@
+import { Module, Global } from '@nestjs/common';
+import * as admin from 'firebase-admin';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
+@Global()
+@Module({
+  providers: [
+    {
+      provide: 'FIREBASE_APP',
+      useValue: admin.initializeApp({
+        credential: admin.credential.cert({
+          projectId: process.env.FIREBASE_PROJECT_ID,
+          privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+          clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        }),
+      }),
+    },
+  ],
+  exports: ['FIREBASE_APP'],
+})
+export class FirebaseModule {}

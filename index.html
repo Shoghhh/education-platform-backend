@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Magic Link Test</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+</head>
+
+<body>
+  <h1>Magic Link Login Test</h1>
+  <input type="email" id="emailInput" placeholder="Enter email for magic link">
+  <button id="sendMagicLinkBtn">Send Magic Link</button>
+  <p id="statusMessage"></p>
+  <hr>
+  <h2>Authenticated User Info</h2>
+  <p><strong>Email:</strong> <span id="userEmail">N/A</span></p>
+  <p><strong>UID:</strong> <span id="userUid">N/A</span></p>
+  <p><strong>ID Token:</strong> <textarea id="idToken" rows="5" cols="50" readonly></textarea></p>
+  <button id="copyTokenBtn">Copy ID Token</button>
+
+  <script>
+    // Your Firebase config (get this from Firebase Project Settings -> Project settings -> General -> Your apps -> Web app -> Firebase SDK snippet -> Config)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCeON3bOALA_N_R97IrCaYiw9y8226sqQU",
+      authDomain: "unishine-77e46.firebaseapp.com",
+      projectId: "unishine-77e46",
+      storageBucket: "unishine-77e46.firebasestorage.app",
+      messagingSenderId: "786391776279",
+      appId: "1:786391776279:web:3d1ce28d17a509bbdeb052",
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const emailInput = document.getElementById('emailInput');
+    const sendMagicLinkBtn = document.getElementById('sendMagicLinkBtn');
+    const statusMessage = document.getElementById('statusMessage');
+    const userEmailSpan = document.getElementById('userEmail');
+    const userUidSpan = document.getElementById('userUid');
+    const idTokenTextarea = document.getElementById('idToken');
+    const copyTokenBtn = document.getElementById('copyTokenBtn');
+
+    sendMagicLinkBtn.addEventListener('click', async () => {
+      const email = emailInput.value;
+      if (!email) {
+        statusMessage.textContent = "Please enter an email.";
+        return;
+      }
+
+      statusMessage.textContent = "Sending magic link...";
+      try {
+        const actionCodeSettings = {
+          url: window.location.href, // Or a specific redirect URL for your app
+          handleCodeInApp: true,
+        };
+        await auth.sendSignInLinkToEmail(email, actionCodeSettings);
+        window.localStorage.setItem('emailForSignIn', email);
+        statusMessage.textContent = `Magic link sent to ${email}. Check your inbox!`;
+      } catch (error) {
+        console.error("Error sending magic link:", error);
+        statusMessage.textContent = `Error: ${error.message}`;
+      }
+    });
+
+    // Handle the sign-in link on page load
+    if (auth.isSignInWithEmailLink(window.location.href)) {
+      let email = window.localStorage.getItem('emailForSignIn');
+      if (!email) {
+        email = prompt('Please provide your email for confirmation:');
+      }
+      statusMessage.textContent = "Signing in...";
+      auth.signInWithEmailLink(email, window.location.href)
+        .then((result) => {
+          window.localStorage.removeItem('emailForSignIn');
+          statusMessage.textContent = "Successfully signed in!";
+          updateUserInfo(result.user);
+        })
+        .catch((error) => {
+          console.error("Error signing in with link:", error);
+          statusMessage.textContent = `Error signing in: ${error.message}`;
+        });
+    }
+
+    // Listen for auth state changes to update UI
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        updateUserInfo(user);
+      } else {
+        userEmailSpan.textContent = 'N/A';
+        userUidSpan.textContent = 'N/A';
+        idTokenTextarea.value = '';
+      }
+    });
+
+    async function updateUserInfo(user) {
+      userEmailSpan.textContent = user.email;
+      userUidSpan.textContent = user.uid;
+      const token = await user.getIdToken();
+      idTokenTextarea.value = token;
+    }
+
+    copyTokenBtn.addEventListener('click', () => {
+      idTokenTextarea.select();
+      document.execCommand('copy');
+      alert('ID Token copied to clipboard!');
+    });
+  </script>
+</body>
+
+</html>
