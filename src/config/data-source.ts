@@ -3,6 +3,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
 import { User } from '../user/entities/user.entity';
 import { Course } from '../course/entities/course.entity';
+import { AcademicPeriod } from '../academic-period/entities/academic-period.entity';
 
 dotenv.config();
 
@@ -13,16 +14,17 @@ const dataSourceOptions: DataSourceOptions = {
   username: process.env.DB_USERNAME || 'your_db_user',
   password: process.env.DB_PASSWORD || 'your_db_password',
   database: process.env.DB_NAME || 'education_platform_db',
-  
+
   entities: [
     User,
-    Course
+    Course,
+    AcademicPeriod,
   ],
-  
+
   synchronize: false,
   migrationsTableName: 'migrations',
   migrations: [__dirname + '/../database/migrations/*.ts'],
-  
+
   logging: ['query', 'error'],
 };
 

@@ -5,7 +5,7 @@ export class Course {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({type: 'varchar', length: 256})
+  @Column({type: 'varchar', length: 255})
   name: string
 
   @Column({type: 'text', nullable: true})

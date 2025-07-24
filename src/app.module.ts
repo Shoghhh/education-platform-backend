@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { FirebaseModule } from './firebase/firebase.module';
 import { AuthModule } from './auth/auth.module';
 import { CourseModule } from './course/course.module';
+import { AcademicPeriodModule } from './academic-period/academic-period.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { CourseModule } from './course/course.module';
     FirebaseModule,
     AuthModule,
     CourseModule,
+    AcademicPeriodModule,
   ],
   controllers: [AppController],
   providers: [AppService],
