@@ -2,6 +2,7 @@ import 'reflect-metadata'; // Must be imported first
 import { DataSource, DataSourceOptions } from 'typeorm';
 import * as dotenv from 'dotenv';
 import { User } from '../user/entities/user.entity';
+import { Course } from '../course/entities/course.entity';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ const dataSourceOptions: DataSourceOptions = {
   
   entities: [
     User,
+    Course
   ],
   
   synchronize: false,

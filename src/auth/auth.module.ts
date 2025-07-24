@@ -6,6 +6,6 @@ import { RolesGuard } from './guards/roles.guard';
 @Module({
   imports: [UserModule],
   providers: [JwtAuthGuard, RolesGuard],
-  exports: [JwtAuthGuard, RolesGuard],
+  exports: [JwtAuthGuard, RolesGuard, UserModule],
 })
 export class AuthModule {}
