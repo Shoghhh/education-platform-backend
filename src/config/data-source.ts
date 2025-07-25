@@ -4,6 +4,7 @@ import * as dotenv from 'dotenv';
 import { User } from '../user/entities/user.entity';
 import { Course } from '../course/entities/course.entity';
 import { AcademicPeriod } from '../academic-period/entities/academic-period.entity';
+import { TimeSlot } from '../time-slot/entities/time-slot.entity';
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ const dataSourceOptions: DataSourceOptions = {
     User,
     Course,
     AcademicPeriod,
+    TimeSlot
   ],
 
   synchronize: false,

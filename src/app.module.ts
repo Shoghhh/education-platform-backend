@@ -8,6 +8,7 @@ import { FirebaseModule } from './firebase/firebase.module';
 import { AuthModule } from './auth/auth.module';
 import { CourseModule } from './course/course.module';
 import { AcademicPeriodModule } from './academic-period/academic-period.module';
+import { TimeSlotModule } from './time-slot/time-slot.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AcademicPeriodModule } from './academic-period/academic-period.module';
     AuthModule,
     CourseModule,
     AcademicPeriodModule,
+    TimeSlotModule,
   ],
   controllers: [AppController],
   providers: [AppService],
