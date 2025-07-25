@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { CourseModule } from './course/course.module';
 import { AcademicPeriodModule } from './academic-period/academic-period.module';
 import { TimeSlotModule } from './time-slot/time-slot.module';
+import { FacultyModule } from './faculty/faculty.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { TimeSlotModule } from './time-slot/time-slot.module';
     CourseModule,
     AcademicPeriodModule,
     TimeSlotModule,
+    FacultyModule,
   ],
   controllers: [AppController],
   providers: [AppService],
