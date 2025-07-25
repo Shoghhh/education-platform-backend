@@ -7,7 +7,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '../common/enums/user-role.enum';
 
 @Controller('time-slots')
-// @UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class TimeSlotController {
   constructor(private readonly timeSlotService: TimeSlotService) { }
 
