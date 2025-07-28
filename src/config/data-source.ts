@@ -6,6 +6,7 @@ import { Course } from '../course/entities/course.entity';
 import { AcademicPeriod } from '../academic-period/entities/academic-period.entity';
 import { TimeSlot } from '../time-slot/entities/time-slot.entity';
 import { Faculty } from '../faculty/entities/faculty.entity';
+import { Resource } from '../resource/entities/resource.entity';
 
 dotenv.config();
 
@@ -22,7 +23,8 @@ const dataSourceOptions: DataSourceOptions = {
     Course,
     AcademicPeriod,
     TimeSlot,
-    Faculty
+    Faculty,
+    Resource
   ],
 
   synchronize: false,

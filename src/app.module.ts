@@ -10,9 +10,23 @@ import { CourseModule } from './course/course.module';
 import { AcademicPeriodModule } from './academic-period/academic-period.module';
 import { TimeSlotModule } from './time-slot/time-slot.module';
 import { FacultyModule } from './faculty/faculty.module';
+import { ResourceModule } from './resource/resource.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
+    MulterModule.register({
+      limits: {
+        fileSize: 1024 * 1024 * 0.5,
+        fieldSize: 1024 * 1024 * 10
+      }
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: path.join(__dirname, '..', '..', 'uploads'), // Path to your uploads directory
+      serveRoot: '/uploads', // The URL path to serve files from
+    }),
     TypeOrmModule.forRoot(databaseConfig),
     UserModule,
     FirebaseModule,
@@ -21,8 +35,9 @@ import { FacultyModule } from './faculty/faculty.module';
     AcademicPeriodModule,
     TimeSlotModule,
     FacultyModule,
+    ResourceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
