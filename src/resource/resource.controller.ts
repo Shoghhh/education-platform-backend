@@ -43,7 +43,7 @@ const multerStorageOptions = {
 };
 
 @Controller('resources')
-// @UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class ResourceController {
   constructor(private readonly resourceService: ResourceService) { }
 
@@ -63,6 +63,9 @@ export class ResourceController {
     @Req() req: Request,
   ) {
     const authenticatedUid = req['userInDb'].uid;
+    if (authenticatedUid === null || authenticatedUid === undefined) {
+      throw new BadRequestException('Authenticated user ID is missing.');
+    }
     return this.resourceService.create(createResourceDto, authenticatedUid, file);
   }
 

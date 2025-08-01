@@ -14,6 +14,7 @@ import { ResourceModule } from './resource/resource.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import * as path from 'path';
 import { MulterModule } from '@nestjs/platform-express';
+import { CourseInstanceModule } from './course-instance/course-instance.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { MulterModule } from '@nestjs/platform-express';
     TimeSlotModule,
     FacultyModule,
     ResourceModule,
+    CourseInstanceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

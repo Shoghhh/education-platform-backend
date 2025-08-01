@@ -13,6 +13,22 @@ export class UserService {
     @Inject('FIREBASE_APP') private firebaseApp: admin.app.App,
   ) { }
 
+  async findOne(identifier: string): Promise<User> {
+    let user: User | null = null;
+
+    if (identifier.includes('@')) {
+      user = await this.usersRepository.findOne({ where: { email: identifier } });
+    } else {
+      user = await this.usersRepository.findOne({ where: { uid: identifier } });
+    }
+
+    if (!user) {
+      throw new NotFoundException(`User with identifier "${identifier}" not found.`);
+    }
+    return user;
+  }
+
+
   async create(createUserDto: CreateUserDto): Promise<User> {
     const existingUser = await this.usersRepository.findOne({ where: { email: createUserDto.email } });
     if (existingUser) {
@@ -58,46 +74,32 @@ export class UserService {
   }
 
   async update(identifier: string, updateUserDto: UpdateUserDto): Promise<User> {
-    let user: User | null = null;
-    if (identifier.includes('@')) {
-      user = await this.usersRepository.findOne({ where: { email: identifier } });
-    } else {
-      user = await this.usersRepository.findOne({ where: { uid: identifier } });
-    }
-
-    if (!user) {
-      throw new NotFoundException(`User with identifier "${identifier}" not found.`);
-    }
+    const user = await this.findOne(identifier);
 
     this.usersRepository.merge(user, updateUserDto);
     return this.usersRepository.save(user);
   }
 
   async remove(identifier: string): Promise<void> {
-    let userToDelete: User | null = null;
-    if (identifier.includes('@')) {
-      userToDelete = await this.usersRepository.findOne({ where: { email: identifier } });
-    } else {
-      userToDelete = await this.usersRepository.findOne({ where: { uid: identifier } });
-    }
-
-    if (!userToDelete) {
-      throw new NotFoundException(`User with identifier "${identifier}" not found.`);
-    }
+    const userToDelete = await this.findOne(identifier);
 
     if (userToDelete.uid) {
       try {
         await this.firebaseApp.auth().deleteUser(userToDelete.uid);
         console.log(`Firebase user ${userToDelete.uid} deleted.`);
       } catch (firebaseError) {
-        console.error(`Failed to delete Firebase user ${userToDelete.uid}:`, firebaseError);
-        throw new BadRequestException(`Failed to delete user in Firebase: ${firebaseError.message}`);
+        if (firebaseError.code === 'auth/user-not-found') {
+          console.warn(`Firebase user ${userToDelete.uid} not found in Firebase, proceeding with local deletion.`);
+        } else {
+          console.error(`Failed to delete Firebase user ${userToDelete.uid}:`, firebaseError);
+          throw new BadRequestException(`Failed to delete user in Firebase: ${firebaseError.message}`);
+        }
       }
     }
 
-    const deleteResult = await this.usersRepository.delete(userToDelete.id); 
+    const deleteResult = await this.usersRepository.delete(userToDelete.id);
     if (deleteResult.affected === 0) {
-      throw new NotFoundException(`User with identifier "${identifier}" not found in local DB.`);
+      throw new NotFoundException(`User with identifier "${identifier}" not found in local DB for deletion.`);
     }
   }
 }

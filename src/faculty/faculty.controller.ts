@@ -8,7 +8,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '../common/enums/user-role.enum';
 
 @Controller('faculties')
-// @UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class FacultyController {
   constructor(private readonly facultyService: FacultyService) {}
 

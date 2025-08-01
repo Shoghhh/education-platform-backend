@@ -1,0 +1,18 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { CourseInstanceService } from './course-instance.service';
+
+describe('CourseInstanceService', () => {
+  let service: CourseInstanceService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [CourseInstanceService],
+    }).compile();
+
+    service = module.get<CourseInstanceService>(CourseInstanceService);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+});

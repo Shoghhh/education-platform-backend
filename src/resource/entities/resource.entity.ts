@@ -1,5 +1,6 @@
+import { CourseInstance } from "../../course-instance/entities/course-instance.entity";
 import { User } from "../../user/entities/user.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('resources')
 export class Resource {
@@ -24,6 +25,9 @@ export class Resource {
 
   @Column({ type: 'timestamp with time zone' })
   uploadDate: Date;
+
+  @ManyToMany(() => CourseInstance, (courseInstance) => courseInstance.resources) // <--- Many-to-many relationship with CourseInstance
+  courseInstances: CourseInstance[]; 
 
   constructor(partial: Partial<Resource>) {
     Object.assign(this, partial);
