@@ -9,6 +9,7 @@ import { Faculty } from '../faculty/entities/faculty.entity';
 import { Resource } from '../resource/entities/resource.entity';
 import { CourseInstance } from '../course-instance/entities/course-instance.entity';
 import { Location } from '../location/entities/location.entity';
+import { ClassSchedule } from '../class-schedule/entities/class-schedule.entity';
 
 dotenv.config();
 
@@ -28,10 +29,11 @@ const dataSourceOptions: DataSourceOptions = {
     Faculty,
     Resource,
     CourseInstance,
-    Location
+    Location,
+    ClassSchedule
   ],
 
-  synchronize: false,
+  synchronize: true,
   migrationsTableName: 'migrations',
   migrations: [__dirname + '/../database/migrations/*.ts'],
 

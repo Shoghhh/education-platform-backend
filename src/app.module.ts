@@ -16,6 +16,7 @@ import * as path from 'path';
 import { MulterModule } from '@nestjs/platform-express';
 import { CourseInstanceModule } from './course-instance/course-instance.module';
 import { LocationModule } from './location/location.module';
+import { ClassScheduleModule } from './class-schedule/class-schedule.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { LocationModule } from './location/location.module';
     ResourceModule,
     CourseInstanceModule,
     LocationModule,
+    ClassScheduleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
